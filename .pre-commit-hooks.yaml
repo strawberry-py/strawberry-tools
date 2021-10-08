@@ -1,0 +1,6 @@
+- id: popie
+  name: popie
+  description: "A tool for string extraction in pumpkin.py repositories"
+  entry: popie
+  language: python
+  types_or: [python]
