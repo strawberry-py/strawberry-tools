@@ -1,0 +1,10 @@
+# IDE
+.idea
+.vscode/settings.json
+
+# Development
+.venv/
+.env
+__pycache__
+.cache/
+.mypy_cache/

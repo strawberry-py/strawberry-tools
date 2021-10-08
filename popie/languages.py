@@ -1,0 +1,1 @@
+LANGUAGES = ("cs", "sk")
