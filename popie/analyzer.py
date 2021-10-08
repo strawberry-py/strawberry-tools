@@ -26,6 +26,8 @@ class Analyzer(ast.NodeVisitor):
             if item.__class__ is ast.Dict:
                 self._iterate(item.keys)
                 self._iterate(item.values)
+            if item.__class__ is ast.BinOp:
+                self._iterate([item.left, item.right])
 
     def visit_Call(self, node: ast.Call):
         """Visit every function call.
