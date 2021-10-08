@@ -12,10 +12,17 @@ from popie.popiefile import PoPieFile
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        prog="popie",
+        description=(
+            "A tool for string extraction in the pumpkin.py bot framework. "
+            "PoPie extracts strings inside of the '_()' function calls into "
+            ".po-like files, which can be translated independently."
+        ),
+    )
     parser.add_argument(
         "directory",
-        help="Path to scanned directory",
+        help="Path to repository",
     )
     args = parser.parse_args()
 
