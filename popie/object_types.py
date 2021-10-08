@@ -23,7 +23,7 @@ class Error(AbstractGettextObject):
     __slots__ = ("filename", "line", "column", "text")
 
     def __str__(self) -> str:
-        return f"Error: {self.filename!s}:{self.line}:{self.column} {self.text} "
+        return f"{self.filename!s}:{self.line}:{self.column} {self.text} "
 
 
 class String(AbstractGettextObject):
