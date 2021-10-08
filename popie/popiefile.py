@@ -70,7 +70,8 @@ class PoPieFile:
     def save(self):
         """Dump the content into the file."""
         with open(self.filename, "w") as pofile:
-            for msgid, msgstr in self.translations.items():
+            string_count: int = len(self.translations)
+            for i, (msgid, msgstr) in enumerate(self.translations.items()):
                 pofile.write(f"msgid {msgid}\n")
 
                 if msgstr is not None:
@@ -78,4 +79,6 @@ class PoPieFile:
                 else:
                     pofile.write("msgstr\n")
 
-                pofile.write("\n")
+                # don't write double newline at the end
+                if i < string_count - 1:
+                    pofile.write("\n")
