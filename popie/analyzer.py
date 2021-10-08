@@ -14,7 +14,7 @@ class Analyzer(ast.NodeVisitor):
     def report_errors(self):
         """Print errors to the stdout."""
         for error in self.errors:
-            print(error)
+            print(f"Analyzer error: {error}")
 
     def _iterate(self, iterable: Iterable):
         """Call itself over all found iterables to find all 'Call's."""
