@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1.0
+-----
+- Add detached mode
+
 1.0.2
 -----
 - Correctly inspect ``_(ctx, "foo").format()``

@@ -20,6 +20,22 @@ def main():
             ".po-like files, which can be translated independently."
         ),
         allow_abbrev=False,
+        epilog=(
+            "If you are a developer, you may have multiple module "
+            "repositories next to the core pumpkin repository. "
+            "In that case you can use the --detached option. "
+            "PoPie won't look for the pumpkin.py file, but will look for "
+            "common directory with '.git/' subdirectory instead. That "
+            "directory will be considered local root and in that directory "
+            "the 'po/' subdirectory will be created. "
+            "You don't need this option if you placed your modules inside of "
+            "the pumpkin.py's 'modules/' directory."
+        ),
+    )
+    parser.add_argument(
+        "--detached",
+        help="Run the PoPie in detached mode.",
+        action="store_true",
     )
     parser.add_argument(
         "paths",
@@ -29,7 +45,7 @@ def main():
     args = parser.parse_args()
 
     paths: List[Path] = get_paths(args.paths)
-    directories: Set[Path] = get_directories(paths)
+    directories: Set[Path] = get_directories(paths, detached=args.detached)
 
     for directory in directories:
         run(directory)
@@ -51,7 +67,7 @@ def get_paths(paths: Iterable[str]) -> List[Path]:
     return result
 
 
-def get_directories(paths: Iterable[Path]) -> Set[Path]:
+def get_directories(paths: Iterable[Path], *, detached: bool) -> Set[Path]:
     """Get list of directories to be run against.
 
     This function takes an iterable of paths and checks if they are part of
@@ -64,10 +80,13 @@ def get_directories(paths: Iterable[Path]) -> Set[Path]:
     root: Optional[Path] = None
     i18n_directories: Set[Path] = set()
 
-    def is_root_directory(path: Path) -> bool:
+    def is_root_directory(path: Path, *, detached: bool) -> bool:
         """Detect if the path is pumpkin.py root directory."""
-        for file in path.glob("*.py"):
-            if file.name == "pumpkin.py":
+        if not detached:
+            if [f for f in path.glob("pumpkin.py") if f.is_file()]:
+                return True
+        if path.is_dir() and detached:
+            if [d for d in path.glob(".git") if d.is_dir()]:
                 return True
         return False
 
@@ -76,11 +95,11 @@ def get_directories(paths: Iterable[Path]) -> Set[Path]:
 
         Go through the path parents and try to find the root.
         """
-        if is_root_directory(path):
+        if is_root_directory(path, detached=detached):
             return path
 
         for parent in path.parents:
-            if is_root_directory(parent):
+            if is_root_directory(parent, detached=detached):
                 return parent
 
         return None
@@ -109,10 +128,12 @@ def get_directories(paths: Iterable[Path]) -> Set[Path]:
         if relpath == "core" or relpath.startswith("core/"):
             i18n_directories.add(root / "core/")
         elif relpath.startswith("modules/"):
-            # get just the first two directories, no matter how deep the
-            # file is
+            # get just the first two directories, no matter how deep the file is
             repo_dir: str = "/".join(relpath.split("/", 2)[:2])
             i18n_directories.add(root / repo_dir)
+        elif detached:
+            # allow detached repositories without core/ & modules/ dirs
+            i18n_directories.add(root)
         else:
             print(f"Warning: Ignoring '{path!s}' (directory criteria not matched).")
 
