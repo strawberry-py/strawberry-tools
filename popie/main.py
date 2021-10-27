@@ -47,8 +47,14 @@ def main():
     paths: List[Path] = get_paths(args.paths)
     directories: Set[Path] = get_directories(paths, detached=args.detached)
 
+    error_count: int = 0
     for directory in directories:
-        run(directory)
+        directory_error_count = run(directory)
+        error_count += directory_error_count
+        print()
+
+    if error_count:
+        sys.exit(os.EX_SOFTWARE)
 
 
 def get_paths(paths: Iterable[str]) -> List[Path]:
@@ -121,7 +127,7 @@ def get_directories(paths: Iterable[Path], *, detached: bool) -> Set[Path]:
             print(f"- {rel_root}")
             rel_path_root: str = os.path.relpath(path_root, start=Path.cwd())
             print(f"- {rel_path_root}")
-            sys.exit(os.EX_PROGRAM)
+            sys.exit(os.EX_SOFTWARE)
 
         relpath: str = os.path.relpath(path, start=root)
         # The 'core/' may be specified on its own, probably.
@@ -140,12 +146,18 @@ def get_directories(paths: Iterable[Path], *, detached: bool) -> Set[Path]:
     return i18n_directories
 
 
-def run(directory: Path):
-    """Run the PoPie for all files under given directory."""
+def run(directory: Path) -> int:
+    """Run the PoPie for all files under given directory.
+
+    :return: Number of errors.
+
+    When errors are found, .popie files won't be updated.
+    """
     if not directory.is_dir():
         print(f"Error: Can't run for '{directory!s}' (path does not exist).")
         sys.exit(os.EX_USAGE)
 
+    error_count: int = 0
     reporter = Reporter()
     py_files: List[Path] = directory.glob("**/*.py")
     for py_file in py_files:
@@ -155,11 +167,20 @@ def run(directory: Path):
         analyzer = Analyzer(py_file)
         analyzer.visit(tree)
         analyzer.report_errors()
+        error_count += len(analyzer.errors)
 
         reporter.add_strings(analyzer.strings)
 
     msgid_count: int = len(reporter.strings)
     rel_directory: str = os.path.relpath(directory, start=directory.cwd())
+
+    if error_count:
+        print(
+            f"Error: Directory '{rel_directory}' contains {error_count} errors, "
+            ".popie files will not be updated."
+        )
+        return error_count
+
     print(f"Info: Found {msgid_count} strings in '{rel_directory}'.")
 
     po_directory: Path = directory / "po"
@@ -173,3 +194,5 @@ def run(directory: Path):
         pofile.save()
         msgstr_count = len([s for s in pofile.translations.values() if s is not None])
         print(f"Info: Saving {msgstr_count} translated strings to '{rel_po}'.")
+
+    return 0

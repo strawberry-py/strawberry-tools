@@ -29,6 +29,30 @@ class Analyzer(ast.NodeVisitor):
             if item.__class__ is ast.BinOp:
                 self._iterate([item.left, item.right])
 
+    def _check_string(self, string: String) -> bool:
+        if string.text[0] in (" ", "\t"):
+            e = Error.from_string(
+                string,
+                "Translation string must not start with whitespace.",
+            )
+            self.errors.append(e)
+            return False
+        if string.text[-1] in (" ", "\t"):
+            e = Error.from_string(
+                string,
+                "Translation string must not end with whitespace.",
+            )
+            self.errors.append(e)
+            return False
+        if "\n" in string.text:
+            e = Error.from_string(
+                string,
+                "Translation string must not contain newlines.",
+            )
+            self.errors.append(e)
+            return False
+        return True
+
     def visit_Call(self, node: ast.Call):
         """Visit every function call.
 
@@ -93,6 +117,8 @@ class Analyzer(ast.NodeVisitor):
             s = String(
                 self.filename, node_str.lineno, node_str.col_offset, node_str.value
             )
+            if not self._check_string(s):
+                return
             self.strings.append(s)
 
         if node_str.__class__ is ast.Call:
@@ -114,6 +140,8 @@ class Analyzer(ast.NodeVisitor):
                 node_str.func.col_offset,
                 node_str.func.value.value,
             )
+            if not self._check_string(s):
+                return
             self.strings.append(s)
 
         self.generic_visit(node)

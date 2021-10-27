@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Optional
 
@@ -23,7 +25,11 @@ class Error(AbstractGettextObject):
     __slots__ = ("filename", "line", "column", "text")
 
     def __str__(self) -> str:
-        return f"{self.filename!s}:{self.line}:{self.column} {self.text} "
+        return f"{self.filename!s}:{self.line}:{self.column} {self.text}"
+
+    @classmethod
+    def from_string(cls, string: String, text: str):
+        return Error(string.filename, string.line, string.column, text)
 
 
 class String(AbstractGettextObject):
