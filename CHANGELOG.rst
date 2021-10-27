@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.2.1
+-----
+- Fix package version
+
 1.2.0
 -----
 - Don't allow spaces and tabs at beggining or the end of strings
