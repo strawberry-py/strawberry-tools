@@ -35,6 +35,7 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip wheel
           python3 -m pip install --upgrade --upgrade-strategy eager -r requirements-dev.txt
+          python3 -m pip install -e .
 
       - name: Check the code formatting
         run: |
