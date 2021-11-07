@@ -3,18 +3,25 @@ from pathlib import Path
 from typing import List, Iterable
 
 from popie.object_types import String, Error
+from popie.constants import CONTEXTS
 
 
 class Analyzer(ast.NodeVisitor):
     def __init__(self, filename: Path):
         self.filename = filename
         self.errors: List[Error] = []
+        self.warnings: List[Error] = []
         self.strings: List[String] = []
 
     def report_errors(self):
         """Print errors to the stdout."""
         for error in self.errors:
             print(f"Analyzer error: {error}")
+
+    def report_warnings(self):
+        """Print errors to the stdout."""
+        for warning in self.warnings:
+            print(f"Analyzer warning: {warning}")
 
     def _iterate(self, iterable: Iterable):
         """Call itself over all found iterables to find all 'Call's."""
@@ -90,16 +97,26 @@ class Analyzer(ast.NodeVisitor):
 
         node_ctx, node_str = node.args
 
-        if node_ctx.id not in ("ctx", "tc"):
+        if node_ctx.id not in CONTEXTS + ("tc",):
             e = Error(
                 self.filename,
                 node.func.lineno,
                 node.func.col_offset,
-                "Translation context variable has to have name 'ctx' or 'tc', "
-                f"got '{node_ctx.id}'.",
+                "Translation context variable has to be one of "
+                + ", ".join(f"'{c}'" for c in CONTEXTS)
+                + f", got '{node_ctx.id}'.",
             )
             self.errors.append(e)
             return
+        if node_ctx.id == "tc":
+            w = Error(
+                self.filename,
+                node.func.lineno,
+                node.func.col_offset,
+                "Translation context variable name 'tc' is deprecated, use 'tcx' "
+                "instead. 'tc' may not be accepted in the future.",
+            )
+            self.warnings.append(w)
 
         if node_str.__class__ is ast.Constant:
             # plain string

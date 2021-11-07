@@ -7,7 +7,7 @@ from pathlib import Path
 
 from popie.analyzer import Analyzer
 from popie.reporter import Reporter
-from popie.languages import LANGUAGES
+from popie.constants import LANGUAGES
 from popie.popiefile import PoPieFile
 
 
@@ -167,6 +167,7 @@ def run(directory: Path) -> int:
         analyzer = Analyzer(py_file)
         analyzer.visit(tree)
         analyzer.report_errors()
+        analyzer.report_warnings()
         error_count += len(analyzer.errors)
 
         reporter.add_strings(analyzer.strings)

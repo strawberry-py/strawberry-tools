@@ -258,3 +258,35 @@ def test_disallow_newline():
     analyzer = Analyzer(Path("."))
     analyzer.visit(tree)
     assert analyzer.errors[0].text == "Translation string must not contain newlines."
+
+
+def test_context_ctx():
+    tree = ast.parse("_(ctx, 'Text')")
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert analyzer.strings[0].text == "Text"
+
+
+def test_context_utx():
+    tree = ast.parse("_(utx, 'Text')")
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert analyzer.strings[0].text == "Text"
+
+
+def test_context_gtx():
+    tree = ast.parse("_(gtx, 'Text')")
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert analyzer.strings[0].text == "Text"
+
+
+def test_context_tc():
+    tree = ast.parse("_(tc, 'Text')")
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert analyzer.strings[0].text == "Text"
+    assert analyzer.warnings[0].text == (
+        "Translation context variable name 'tc' is deprecated, "
+        "use 'tcx' instead. 'tc' may not be accepted in the future."
+    )
