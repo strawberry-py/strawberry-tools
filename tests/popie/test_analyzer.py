@@ -288,5 +288,5 @@ def test_context_tc():
     assert analyzer.strings[0].text == "Text"
     assert analyzer.warnings[0].text == (
         "Translation context variable name 'tc' is deprecated, "
-        "use 'tcx' instead. 'tc' may not be accepted in the future."
+        "use 'utx' instead. 'tc' may not be accepted in the future."
     )

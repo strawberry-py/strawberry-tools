@@ -113,7 +113,7 @@ class Analyzer(ast.NodeVisitor):
                 self.filename,
                 node.func.lineno,
                 node.func.col_offset,
-                "Translation context variable name 'tc' is deprecated, use 'tcx' "
+                "Translation context variable name 'tc' is deprecated, use 'utx' "
                 "instead. 'tc' may not be accepted in the future.",
             )
             self.warnings.append(w)
