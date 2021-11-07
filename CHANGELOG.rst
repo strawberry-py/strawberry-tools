@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.3.0
+-----
+- Set valid context names to 'ctx', 'utx' and 'gtx'
+
 1.2.1
 -----
 - Fix package version
