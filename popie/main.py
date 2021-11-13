@@ -38,6 +38,11 @@ def main():
         action="store_true",
     )
     parser.add_argument(
+        "--strict",
+        help="Return non-zero code if any of PoPie files changes.",
+        action="store_true",
+    )
+    parser.add_argument(
         "paths",
         help="Paths to directories and files",
         nargs="+",
@@ -48,13 +53,27 @@ def main():
     directories: Set[Path] = get_directories(paths, detached=args.detached)
 
     error_count: int = 0
+    updated_files: int = 0
     for directory in directories:
-        directory_error_count = run(directory)
-        error_count += directory_error_count
+        reason, count = run(directory)
+
+        if reason == "found errors":
+            error_count += count
+        if reason == "updated files":
+            updated_files += count
+
         print()
 
-    if error_count:
+    if args.strict and updated_files > 0:
+        print(f"PoPie: {updated_files} files updated in strict mode. ")
         sys.exit(os.EX_SOFTWARE)
+
+    if error_count:
+        print(f"PoPie: {updated_files} files updated, {error_count} errors found. ")
+        sys.exit(os.EX_SOFTWARE)
+
+    print(f"PoPie: {updated_files} files have been updated.")
+    sys.exit(os.EX_OK)
 
 
 def get_paths(paths: Iterable[str]) -> List[Path]:
@@ -180,20 +199,23 @@ def run(directory: Path) -> int:
             f"Error: Directory '{rel_directory}' contains {error_count} errors, "
             ".popie files will not be updated."
         )
-        return error_count
+        return ("found errors", error_count)
 
     print(f"Info: Found {msgid_count} strings in '{rel_directory}'.")
 
     po_directory: Path = directory / "po"
     po_directory.mkdir(exist_ok=True)
 
+    updated_files: int = 0
     for lang in LANGUAGES:
         po: Path = po_directory / f"{lang}.popie"
         rel_po: str = os.path.relpath(po, start=po.cwd())
         pofile = PoPieFile(po)
         pofile.update(reporter)
         pofile.save()
+        if pofile.is_updated():
+            updated_files += 1
         msgstr_count = len([s for s in pofile.translations.values() if s is not None])
         print(f"Info: Saving {msgstr_count} translated strings to '{rel_po}'.")
 
-    return 0
+    return ("updated files", updated_files)

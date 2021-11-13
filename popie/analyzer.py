@@ -19,7 +19,7 @@ class Analyzer(ast.NodeVisitor):
             print(f"Analyzer error: {error}")
 
     def report_warnings(self):
-        """Print errors to the stdout."""
+        """Print warnings to the stdout."""
         for warning in self.warnings:
             print(f"Analyzer warning: {warning}")
 

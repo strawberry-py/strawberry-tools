@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.4.0
+-----
+- Add ``--strict`` argument
+
 1.3.1
 -----
 - Fix 'tc' deprecation hint

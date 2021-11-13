@@ -7,13 +7,18 @@ from popie.reporter import Reporter
 class PoPieFile:
     """Object representing a PO file."""
 
-    __slots__ = ("filename", "translations")
+    __slots__ = ("filename", "translations", "_before")
 
     def __init__(self, filename: Path):
         self.filename = filename
         self.translations: Dict[str, str] = {}
 
         self.load_strings()
+
+        self._before: Optional[str] = None
+        if self.filename.exists():
+            with open(self.filename, "r") as handle:
+                self._before = handle.read()
 
     def load_strings(self) -> None:
         """Load translations from the file.
@@ -82,3 +87,10 @@ class PoPieFile:
                 # don't write double newline at the end
                 if i < string_count - 1:
                     pofile.write("\n")
+
+    def is_updated(self) -> bool:
+        after: Optional[str] = None
+        if self.filename.exists():
+            with open(self.filename, "r") as handle:
+                after = handle.read()
+        return self._before != after
