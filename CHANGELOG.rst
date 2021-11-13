@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.4.1
+-----
+- Keep the list of files stable
+
 1.4.0
 -----
 - Add ``--strict`` argument

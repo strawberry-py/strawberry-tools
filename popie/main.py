@@ -50,7 +50,7 @@ def main():
     args = parser.parse_args()
 
     paths: List[Path] = get_paths(args.paths)
-    directories: Set[Path] = get_directories(paths, detached=args.detached)
+    directories: List[Path] = get_directories(paths, detached=args.detached)
 
     error_count: int = 0
     updated_files: int = 0
@@ -89,10 +89,10 @@ def get_paths(paths: Iterable[str]) -> List[Path]:
             print(f"Error: Specified path '{path!s}' does not exist.")
             sys.exit(os.EX_USAGE)
         result.append(path.resolve())
-    return result
+    return sorted(result)
 
 
-def get_directories(paths: Iterable[Path], *, detached: bool) -> Set[Path]:
+def get_directories(paths: Iterable[Path], *, detached: bool) -> List[Path]:
     """Get list of directories to be run against.
 
     This function takes an iterable of paths and checks if they are part of
@@ -162,7 +162,8 @@ def get_directories(paths: Iterable[Path], *, detached: bool) -> Set[Path]:
         else:
             print(f"Warning: Ignoring '{path!s}' (directory criteria not matched).")
 
-    return i18n_directories
+    sorted_i18n_directories = sorted(list(i18n_directories))
+    return sorted_i18n_directories
 
 
 def run(directory: Path) -> int:
@@ -178,7 +179,7 @@ def run(directory: Path) -> int:
 
     error_count: int = 0
     reporter = Reporter()
-    py_files: List[Path] = directory.glob("**/*.py")
+    py_files: List[Path] = sorted(directory.glob("**/*.py"))
     for py_file in py_files:
         with open(py_file, "r") as source:
             tree = ast.parse(source.read())
