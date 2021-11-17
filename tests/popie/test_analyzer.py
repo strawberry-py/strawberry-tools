@@ -202,6 +202,16 @@ def test_fn_inside_named_dict_argument_as_value():
     assert analyzer.strings[0].text == "Text"
 
 
+def test_fn_value():
+    # https://github.com/pumpkin-py/pumpkin-tools/issues/4
+    text = 'object.function(key=(_(ctx, "Text") + "\\n").format())'
+    tree = ast.parse(text)
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert len(analyzer.strings) == 1
+    assert analyzer.strings[0].text == "Text"
+
+
 def test_cls_attribute():
     tree = ast.parse("class C:\n\tattr = _(ctx, 'Text')")
     analyzer = Analyzer(Path("."))

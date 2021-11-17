@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.4.2
+-----
+- Inspect all function values
+
 1.4.1
 -----
 - Keep the list of files stable

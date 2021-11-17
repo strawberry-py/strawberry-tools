@@ -74,8 +74,8 @@ class Analyzer(ast.NodeVisitor):
         the PO files.
         """
         # Inspect formatted translations (the .format() is parent in AST form)
-        if getattr(node.func, "value", None).__class__ is ast.Call:
-            self.visit_Call(node.func.value)
+        if getattr(node.func, "value", None) is not None:
+            self._iterate([node.func.value])
         # Inspect unnamed arguments for function calls
         self._iterate(node.args)
         # Inspect named arguments for function calls
