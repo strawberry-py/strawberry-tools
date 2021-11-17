@@ -97,6 +97,21 @@ class Analyzer(ast.NodeVisitor):
 
         node_ctx, node_str = node.args
 
+        if (
+            getattr(node.func, "id", "") == "_"
+            and getattr(node.args[1], "func", None) is not None
+            and getattr(node.args[1].func, "attr", "") == "format"
+        ):
+            e = Error(
+                self.filename,
+                node.func.lineno,
+                node.func.col_offset,
+                "Bad '.format()' placement in translation function "
+                "(has to be outside of '_()' call.)",
+            )
+            self.errors.append(e)
+            return
+
         if node_ctx.id not in CONTEXTS + ("tc",):
             e = Error(
                 self.filename,

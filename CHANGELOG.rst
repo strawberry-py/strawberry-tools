@@ -1,9 +1,10 @@
 Changelog
 =========
 
-1.4.2
+1.5.0
 -----
 - Inspect all function values
+- Catch bad placements of .format() in _() calls.
 
 1.4.1
 -----

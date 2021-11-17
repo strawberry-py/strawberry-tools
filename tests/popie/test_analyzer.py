@@ -270,6 +270,25 @@ def test_disallow_newline():
     assert analyzer.errors[0].text == "Translation string must not contain newlines."
 
 
+def test_diallow_bad_format():
+    # https://github.com/pumpkin-py/pumpkin-tools/issues/6
+    tree = ast.parse("_(ctx, '{text}'.format(text='Text'))")
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert analyzer.errors[0].text == (
+        "Bad '.format()' placement in translation function "
+        "(has to be outside of '_()' call.)"
+    )
+
+
+def test_diallow_bad_format_FP():
+    # Prevent false positives for test_diallow_bad_format()
+    tree = ast.parse("'{text}'.format(text='Text')")
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert len(analyzer.errors) == 0
+
+
 def test_context_ctx():
     tree = ast.parse("_(ctx, 'Text')")
     analyzer = Analyzer(Path("."))
