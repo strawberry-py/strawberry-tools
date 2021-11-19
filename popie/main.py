@@ -160,7 +160,14 @@ def get_directories(paths: Iterable[Path], *, detached: bool) -> List[Path]:
             # allow detached repositories without pie/ & modules/ dirs
             i18n_directories.add(root)
         else:
-            print(f"Warning: Ignoring '{path!s}' (directory criteria not matched).")
+            warning: str = (
+                f"Warning: Ignoring '{path!s}': directory criteria not matched"
+            )
+            if not detached:
+                warning += " (could not find 'pumpkin.py' script)."
+            else:
+                warning += " (could not find '.git' directory)."
+            print(warning)
 
     sorted_i18n_directories = sorted(list(i18n_directories))
     return sorted_i18n_directories

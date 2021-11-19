@@ -4,6 +4,7 @@ Changelog
 1.6.0
 -----
 - Look for 'pie/' directory instead for 'core/'
+- Describe why a directory is ignored
 
 1.5.0
 -----
