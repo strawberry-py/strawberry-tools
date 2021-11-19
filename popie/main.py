@@ -22,7 +22,7 @@ def main():
         allow_abbrev=False,
         epilog=(
             "If you are a developer, you may have multiple module "
-            "repositories next to the core pumpkin repository. "
+            "repositories next to the main pumpkin repository. "
             "In that case you can use the --detached option. "
             "PoPie won't look for the pumpkin.py file, but will look for "
             "common directory with '.git/' subdirectory instead. That "
@@ -149,15 +149,15 @@ def get_directories(paths: Iterable[Path], *, detached: bool) -> List[Path]:
             sys.exit(os.EX_SOFTWARE)
 
         relpath: str = os.path.relpath(path, start=root)
-        # The 'core/' may be specified on its own, probably.
-        if relpath == "core" or relpath.startswith("core/"):
-            i18n_directories.add(root / "core/")
+        # The 'pie/' may be specified on its own.
+        if relpath == "pie" or relpath.startswith("pie/"):
+            i18n_directories.add(root / "pie/")
         elif relpath.startswith("modules/"):
             # get just the first two directories, no matter how deep the file is
             repo_dir: str = "/".join(relpath.split("/", 2)[:2])
             i18n_directories.add(root / repo_dir)
         elif detached:
-            # allow detached repositories without core/ & modules/ dirs
+            # allow detached repositories without pie/ & modules/ dirs
             i18n_directories.add(root)
         else:
             print(f"Warning: Ignoring '{path!s}' (directory criteria not matched).")
