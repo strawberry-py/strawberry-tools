@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.6.1
+-----
+- Correct PoPie's package version
+
 1.6.0
 -----
 - Look for 'pie/' directory instead for 'core/'
