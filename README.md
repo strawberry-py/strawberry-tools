@@ -38,6 +38,8 @@ The .popie file will be commited with the code change and will be waiting for tr
 
 By using this tool as pre-commit hook we can ensure that all strings are found, and that the translators have no pending work.
 
+You can enable debugging by setting `POPIE_DEBUG=1`.
+
 ## Development
 
 Offically we only support running under Linux. This tool does not require any Linux-specific tools, so it will be possible to work under Windows or OSX directly. However, our manuals assume that you are using some kind of Linux.
