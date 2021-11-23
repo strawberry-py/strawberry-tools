@@ -2,13 +2,19 @@ import ast
 import argparse
 import sys
 import os
-from typing import Iterable, List, Optional, Set
+from typing import Callable, Iterable, List, Optional, Set
 from pathlib import Path
 
 from popie.analyzer import Analyzer
 from popie.reporter import Reporter
 from popie.constants import LANGUAGES
 from popie.popiefile import PoPieFile
+
+debug: Callable = (
+    lambda message: print("\033[37m" + "PoPie: \033[3m" + message + "\033[0m")
+    if os.getenv("POPIE_DEBUG")
+    else lambda *args, **kwargs: None
+)
 
 
 def main():
@@ -188,6 +194,7 @@ def run(directory: Path) -> int:
     reporter = Reporter()
     py_files: List[Path] = sorted(directory.glob("**/*.py"))
     for py_file in py_files:
+        debug(f"Opening {py_file}")
         with open(py_file, "r") as source:
             tree = ast.parse(source.read())
 
@@ -197,7 +204,9 @@ def run(directory: Path) -> int:
         analyzer.report_warnings()
         error_count += len(analyzer.errors)
 
-        reporter.add_strings(analyzer.strings)
+        if analyzer.strings:
+            reporter.add_strings(analyzer.strings)
+            debug(f"{len(analyzer.strings)} strings found.")
 
     msgid_count: int = len(reporter.strings)
     rel_directory: str = os.path.relpath(directory, start=directory.cwd())

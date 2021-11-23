@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.7.0
+-----
+- Add debugging support with ``POPIE_DEBUG=1``
+
 1.6.1
 -----
 - Correct PoPie's package version
