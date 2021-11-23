@@ -112,7 +112,20 @@ class Analyzer(ast.NodeVisitor):
             self.errors.append(e)
             return
 
-        if node_ctx.id not in CONTEXTS + ("tc",):
+        if node_ctx.__class__ is ast.Attribute:
+            # we support 'self.ctx'
+            if node_ctx.value.id != "self" or node_ctx.attr not in CONTEXTS:
+                e = Error(
+                    self.filename,
+                    node_ctx.lineno,
+                    node_ctx.col_offset,
+                    "Inherited translation context variable has to be one of "
+                    + ", ".join(f"'{c}'" for c in CONTEXTS)
+                    + f", got '{node_ctx.attr}'.",
+                )
+                self.errors.append(e)
+                return
+        elif node_ctx.id not in CONTEXTS + ("tc",):
             e = Error(
                 self.filename,
                 node.func.lineno,
@@ -123,7 +136,7 @@ class Analyzer(ast.NodeVisitor):
             )
             self.errors.append(e)
             return
-        if node_ctx.id == "tc":
+        elif node_ctx.id == "tc":
             w = Error(
                 self.filename,
                 node.func.lineno,

@@ -319,3 +319,35 @@ def test_context_tc():
         "Translation context variable name 'tc' is deprecated, "
         "use 'utx' instead. 'tc' may not be accepted in the future."
     )
+
+
+def test_context_self_ctx():
+    tree = ast.parse("_(self.ctx, 'Text')")
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert analyzer.strings[0].text == "Text"
+
+
+def test_context_self_utx():
+    tree = ast.parse("_(self.utx, 'Text')")
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert analyzer.strings[0].text == "Text"
+
+
+def test_context_self_gtx():
+    tree = ast.parse("_(self.gtx, 'Text')")
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert analyzer.strings[0].text == "Text"
+
+
+def test_context_self_foo():
+    tree = ast.parse("_(self.foo, 'Text')")
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert len(analyzer.strings) == 0
+    assert analyzer.errors[0].text == (
+        "Inherited translation context variable has to be "
+        "one of 'ctx', 'utx', 'gtx', got 'foo'."
+    )

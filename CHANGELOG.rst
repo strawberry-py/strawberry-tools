@@ -4,6 +4,7 @@ Changelog
 1.7.0
 -----
 - Add debugging support with ``POPIE_DEBUG=1``
+- Add support for ``self.ctx`` format
 
 1.6.1
 -----
