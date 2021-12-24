@@ -17,7 +17,7 @@ class PoPieFile:
 
         self._before: Optional[str] = None
         if self.filename.exists():
-            with open(self.filename, "r") as handle:
+            with open(self.filename, "r", encoding="utf-8") as handle:
                 self._before = handle.read()
 
     def load_strings(self) -> None:
@@ -29,7 +29,7 @@ class PoPieFile:
         if not self.filename.exists():
             return
 
-        with open(self.filename, "r") as pofile:
+        with open(self.filename, "r", encoding="utf-8") as pofile:
             msgid: str = ""
             msgstr: Optional[str] = None
 
@@ -74,7 +74,7 @@ class PoPieFile:
 
     def save(self):
         """Dump the content into the file."""
-        with open(self.filename, "w") as pofile:
+        with open(self.filename, "w", encoding="utf-8") as pofile:
             string_count: int = len(self.translations)
             for i, (msgid, msgstr) in enumerate(self.translations.items()):
                 pofile.write(f"msgid {msgid}\n")
@@ -91,6 +91,6 @@ class PoPieFile:
     def is_updated(self) -> bool:
         after: Optional[str] = None
         if self.filename.exists():
-            with open(self.filename, "r") as handle:
+            with open(self.filename, "r", encoding="utf-8") as handle:
                 after = handle.read()
         return self._before != after
