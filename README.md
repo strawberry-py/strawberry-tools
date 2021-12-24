@@ -42,7 +42,7 @@ You can enable debugging by setting `POPIE_DEBUG=1`.
 
 ## Development
 
-Offically we only support running under Linux. This tool does not require any Linux-specific tools, so it will be possible to work under Windows or OSX directly. However, our manuals assume that you are using some kind of Linux.
+pumpkin.py is only intended to be run under Linux. Pumpkin tools try to be more open (you don't need Linux to make the translations), so included packages should work under other operating systems as well. However, they aren't officialy supported and we don't test new features on those systems. Feel free to open compatibility issue, but you may get only limited support, as non-Linux systems are not our priority.
 
 The first thing you have to do is to fork the repository.
 

@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.7.1
+-----
+- Alter return codes for Windows compatibility
+- Force UTF-8 for Windows compatibility
+
 1.7.0
 -----
 - Add debugging support with ``POPIE_DEBUG=1``
