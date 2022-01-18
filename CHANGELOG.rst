@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.7.2
+-----
+- Force UTF-8 for Windows compatibility
+
 1.7.1
 -----
 - Alter return codes for Windows compatibility

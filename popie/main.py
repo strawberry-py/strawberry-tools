@@ -202,7 +202,7 @@ def run(directory: Path) -> int:
     py_files: List[Path] = sorted(directory.glob("**/*.py"))
     for py_file in py_files:
         debug(f"Opening {py_file}")
-        with open(py_file, "r") as source:
+        with open(py_file, "r", encoding="utf-8") as source:
             tree = ast.parse(source.read())
 
         analyzer = Analyzer(py_file)
