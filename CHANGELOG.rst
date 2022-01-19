@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.7.3
+-----
+- Get path separator from OS instead of hardcoding
+
 1.7.2
 -----
 - Force UTF-8 for Windows compatibility

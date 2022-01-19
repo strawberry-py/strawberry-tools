@@ -11,6 +11,8 @@ from popie.reporter import Reporter
 from popie.constants import LANGUAGES
 from popie.popiefile import PoPieFile
 
+OS_SEP = str(os.sep)
+
 debug: Callable = (
     lambda message: print("\033[37m" + "PoPie: \033[3m" + message + "\033[0m")
     if os.getenv("POPIE_DEBUG")
@@ -163,11 +165,11 @@ def get_directories(paths: Iterable[Path], *, detached: bool) -> List[Path]:
 
         relpath: str = os.path.relpath(path, start=root)
         # The 'pie/' may be specified on its own.
-        if relpath == "pie" or relpath.startswith("pie/"):
-            i18n_directories.add(root / "pie/")
-        elif relpath.startswith("modules/"):
+        if relpath == "pie" or relpath.startswith("pie" + OS_SEP):
+            i18n_directories.add(root / ("pie" + OS_SEP))
+        elif relpath.startswith("modules" + OS_SEP):
             # get just the first two directories, no matter how deep the file is
-            repo_dir: str = "/".join(relpath.split("/", 2)[:2])
+            repo_dir: str = OS_SEP.join(relpath.split(OS_SEP, 2)[:2])
             i18n_directories.add(root / repo_dir)
         elif detached:
             # allow detached repositories without pie/ & modules/ dirs
