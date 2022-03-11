@@ -84,7 +84,7 @@ def main():
         sys.exit(ExitCode.POPIE)
 
     if error_count:
-        print(f"PoPie: {updated_files} files updated, {error_count} errors found. ")
+        print(f"PoPie: {error_count} errors found. ")
         sys.exit(ExitCode.POPIE)
 
     print(f"PoPie: {updated_files} files have been updated.")
@@ -192,8 +192,6 @@ def run(directory: Path) -> int:
     """Run the PoPie for all files under given directory.
 
     :return: Number of errors.
-
-    When errors are found, .popie files won't be updated.
     """
     if not directory.is_dir():
         print(f"Error: Can't run for '{directory!s}' (path does not exist).")
@@ -242,6 +240,12 @@ def run(directory: Path) -> int:
         if pofile.is_updated():
             updated_files += 1
         msgstr_count = len([s for s in pofile.translations.values() if s is not None])
+        for error in pofile.errors:
+            print(f"Error: {error}")
+        error_count += len(pofile.errors)
         print(f"Info: Saving {msgstr_count} translated strings to '{rel_po}'.")
+
+    if error_count:
+        return ("found errors", error_count)
 
     return ("updated files", updated_files)

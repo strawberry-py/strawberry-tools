@@ -1,4 +1,5 @@
-from typing import Dict, Optional
+import re
+from typing import Dict, Optional, List
 from pathlib import Path
 
 from popie.reporter import Reporter
@@ -7,18 +8,25 @@ from popie.reporter import Reporter
 class PoPieFile:
     """Object representing a PO file."""
 
-    __slots__ = ("filename", "translations", "_before")
+    __slots__ = ("filename", "translations", "errors", "_before")
 
     def __init__(self, filename: Path):
         self.filename = filename
         self.translations: Dict[str, str] = {}
+        self.errors: List[str] = []
 
         self.load_strings()
+        self.check_strings()
 
         self._before: Optional[str] = None
         if self.filename.exists():
             with open(self.filename, "r", encoding="utf-8") as handle:
                 self._before = handle.read()
+
+    def report_errors(self):
+        """Print errors to the stdout."""
+        for error in self.errors:
+            print(f"PopieFile error: {error}")
 
     def load_strings(self) -> None:
         """Load translations from the file.
@@ -50,6 +58,18 @@ class PoPieFile:
 
                     self.translations[msgid] = msgstr
                     continue
+
+    def check_strings(self) -> None:
+        for key, value in self.translations.items():
+            if value is None:
+                continue
+            key_variables = set(re.findall(r"{(.+?)}", key))
+            value_variables = set(re.findall(r"{(.+?)}", value))
+
+            if key_variables != value_variables:
+                vv = ", ".join(value_variables)
+                e = f"Translation for '{key}' contains bad variables: {vv}."
+                self.errors.append(e)
 
     def update(self, reporter: Reporter):
         """Update state of translations.
