@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.8.0
+-----
+- Warn when translated string contains different variables than the original one
+
 1.7.3
 -----
 - Get path separator from OS instead of hardcoding
