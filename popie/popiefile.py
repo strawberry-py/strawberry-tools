@@ -63,13 +63,15 @@ class PoPieFile:
         for key, value in self.translations.items():
             if value is None:
                 continue
-            key_variables = set(re.findall(r"{(.+?)}", key))
-            value_variables = set(re.findall(r"{(.+?)}", value))
+            key_variables: List[str] = re.findall(r"{(.+?)}", key)
+            value_variables: List[str] = re.findall(r"{(.+?)}", value)
 
-            if key_variables != value_variables:
-                vv = ", ".join(value_variables)
-                e = f"Translation for '{key}' contains bad variables: {vv}."
-                self.errors.append(e)
+            if set(key_variables) != set(value_variables):
+                error: str = (
+                    f"Translation for '{key}' contains bad variables: "
+                    f"{', '.join(value_variables)}."
+                )
+                self.errors.append(error)
 
     def update(self, reporter: Reporter):
         """Update state of translations.
