@@ -1,4 +1,7 @@
+import difflib
+import os
 import re
+import functools
 from typing import Dict, Optional, List
 from pathlib import Path
 
@@ -110,9 +113,58 @@ class PoPieFile:
                 if i < string_count - 1:
                     pofile.write("\n")
 
-    def is_updated(self) -> bool:
+    @functools.lru_cache(maxsize=None)
+    def _get_after(self) -> Optional[str]:
+        """Get contents of changed file."""
         after: Optional[str] = None
         if self.filename.exists():
             with open(self.filename, "r", encoding="utf-8") as handle:
                 after = handle.read()
-        return self._before != after
+        return after
+
+    def is_updated(self) -> bool:
+        """Decide if the file was updated or not."""
+        return self._before != self._get_after()
+
+    def _color_diff(self, lines: List[str]) -> List[str]:
+        """Colorize diff output."""
+        # Windows does not support bash escape codes
+        if os.name == "nt":
+            return lines
+        new_lines: List[str] = []
+        for line in lines:
+            if line.startswith("+"):
+                line = f"\033[32m{line}\033[0m"
+            elif line.startswith("-"):
+                line = f"\033[31m{line}\033[0m"
+            elif line.startswith("@"):
+                line = f"\033[33m{line}\033[0m"
+            new_lines.append(line)
+        return new_lines
+
+    def print_diff(self) -> None:
+        """Create and print difference between 'before' and 'after'."""
+        if not self._before:
+            return
+
+        after = self._get_after()
+        if not after:
+            return
+
+        before_lines = [line.strip() for line in self._before.split("\n")]
+        after_lines = [line.strip() for line in after.split("\n")]
+
+        diff_lines = [
+            line
+            for line in difflib.unified_diff(
+                before_lines,
+                after_lines,
+                fromfile=f"{self.filename.parents[1].name}/; {self.filename.name}",
+                tofile="PoPie changes",
+                n=0,
+                lineterm="",
+            )
+        ]
+        diff_lines = self._color_diff(diff_lines)
+        diff = "\n" + "\n".join(diff_lines)
+        print(diff)

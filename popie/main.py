@@ -58,6 +58,11 @@ def main():
         action="store_true",
     )
     parser.add_argument(
+        "--diff",
+        help="If there are changes, show them.",
+        action="store_true",
+    )
+    parser.add_argument(
         "paths",
         help="Paths to directories and files",
         nargs="+",
@@ -70,7 +75,7 @@ def main():
     error_count: int = 0
     updated_files: int = 0
     for directory in directories:
-        reason, count = run(directory)
+        reason, count = run(directory, show_diff=args.diff)
 
         if reason == "found errors":
             error_count += count
@@ -188,7 +193,7 @@ def get_directories(paths: Iterable[Path], *, detached: bool) -> List[Path]:
     return sorted_i18n_directories
 
 
-def run(directory: Path) -> int:
+def run(directory: Path, *, show_diff: bool = False) -> int:
     """Run the PoPie for all files under given directory.
 
     :return: Number of errors.
@@ -239,6 +244,8 @@ def run(directory: Path) -> int:
         pofile.save()
         if pofile.is_updated():
             updated_files += 1
+            if show_diff:
+                pofile.print_diff()
         msgstr_count = len([s for s in pofile.translations.values() if s is not None])
         for error in pofile.errors:
             print(f"Error: {error}")
