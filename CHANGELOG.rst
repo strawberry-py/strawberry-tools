@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.9.0
+-----
+- Add ``--diff`` argument to display changes to the .popie files
+
 1.8.0
 -----
 - Warn when translated string contains different variables than the original one
