@@ -351,3 +351,12 @@ def test_context_self_foo():
         "Inherited translation context variable has to be "
         "one of 'ctx', 'utx', 'gtx', got 'foo'."
     )
+
+
+def test_disallow_variable_arg():
+    tree = ast.parse("_(ctx, text)")
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert analyzer.errors[0].text == (
+        "Bad string argument (has to be literal, not variable)."
+    )
