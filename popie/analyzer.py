@@ -112,6 +112,18 @@ class Analyzer(ast.NodeVisitor):
             self.errors.append(e)
             return
 
+        if getattr(node.func, "id", "") == "_" and not isinstance(
+            node.args[1], ast.Constant
+        ):
+            e = Error(
+                self.filename,
+                node.func.lineno,
+                node.func.col_offset,
+                "Bad string argument (has to be literal, not variable).",
+            )
+            self.errors.append(e)
+            return
+
         if node_ctx.__class__ is ast.Attribute:
             # we support 'self.ctx'
             if node_ctx.value.id != "self" or node_ctx.attr not in CONTEXTS:
