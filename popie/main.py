@@ -13,8 +13,8 @@ from popie.popiefile import PoPieFile
 
 OS_SEP = str(os.sep)
 
-debug: Callable = (
-    lambda message: print("\033[37m" + "PoPie: \033[3m" + message + "\033[0m")
+debug: Callable = lambda message: (
+    print("\033[37m" + "PoPie: \033[3m" + message + "\033[0m")
     if os.getenv("POPIE_DEBUG")
     else lambda *args, **kwargs: None
 )
