@@ -296,6 +296,13 @@ def test_context_ctx():
     assert analyzer.strings[0].text == "Text"
 
 
+def test_context_itx():
+    tree = ast.parse("_(itx, 'Text')")
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert analyzer.strings[0].text == "Text"
+
+
 def test_context_utx():
     tree = ast.parse("_(utx, 'Text')")
     analyzer = Analyzer(Path("."))
@@ -328,6 +335,13 @@ def test_context_self_ctx():
     assert analyzer.strings[0].text == "Text"
 
 
+def test_context_self_itx():
+    tree = ast.parse("_(self.itx, 'Text')")
+    analyzer = Analyzer(Path("."))
+    analyzer.visit(tree)
+    assert analyzer.strings[0].text == "Text"
+
+
 def test_context_self_utx():
     tree = ast.parse("_(self.utx, 'Text')")
     analyzer = Analyzer(Path("."))
@@ -349,7 +363,7 @@ def test_context_self_foo():
     assert len(analyzer.strings) == 0
     assert analyzer.errors[0].text == (
         "Inherited translation context variable has to be "
-        "one of 'ctx', 'utx', 'gtx', got 'foo'."
+        "one of 'ctx', 'itx', 'utx', 'gtx', got 'foo'."
     )
 
 
