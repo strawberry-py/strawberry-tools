@@ -203,7 +203,7 @@ def test_fn_inside_named_dict_argument_as_value():
 
 
 def test_fn_value():
-    # https://github.com/pumpkin-py/pumpkin-tools/issues/4
+    # https://github.com/strawberry-py/strawberry-tools/issues/4
     text = 'object.function(key=(_(ctx, "Text") + "\\n").format())'
     tree = ast.parse(text)
     analyzer = Analyzer(Path("."))
@@ -271,7 +271,7 @@ def test_disallow_newline():
 
 
 def test_diallow_bad_format():
-    # https://github.com/pumpkin-py/pumpkin-tools/issues/6
+    # Check format placement
     tree = ast.parse("_(ctx, '{text}'.format(text='Text'))")
     analyzer = Analyzer(Path("."))
     analyzer.visit(tree)
