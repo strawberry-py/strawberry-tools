@@ -30,21 +30,21 @@ def main():
     parser = argparse.ArgumentParser(
         prog="popie",
         description=(
-            "A tool for string extraction in the pumpkin.py bot framework. "
+            "A tool for string extraction in the strawberry.py bot framework. "
             "PoPie extracts strings inside of the '_()' function calls into "
             ".po-like files, which can be translated independently."
         ),
         allow_abbrev=False,
         epilog=(
             "If you are a developer, you may have multiple module "
-            "repositories next to the main pumpkin repository. "
+            "repositories next to the main strawberry repository. "
             "In that case you can use the --detached option. "
-            "PoPie won't look for the pumpkin.py file, but will look for "
+            "PoPie won't look for the strawberry.py file, but will look for "
             "common directory with '.git/' subdirectory instead. That "
             "directory will be considered local root and in that directory "
             "the 'po/' subdirectory will be created. "
             "You don't need this option if you placed your modules inside of "
-            "the pumpkin.py's 'modules/' directory."
+            "the strawberry.py's 'modules/' directory."
         ),
     )
     parser.add_argument(
@@ -116,19 +116,19 @@ def get_directories(paths: Iterable[Path], *, detached: bool) -> List[Path]:
     """Get list of directories to be run against.
 
     This function takes an iterable of paths and checks if they are part of
-    known pumpkin.py file structure. If they are, the directory will be flagged
+    known strawberry.py file structure. If they are, the directory will be flagged
     to be scanned.
 
-    If the file is not part of th i18n pumpkin.py scheme, it won't be used, and
+    If the file is not part of th i18n strawberry.py scheme, it won't be used, and
     a warning will be printed.
     """
     root: Optional[Path] = None
     i18n_directories: Set[Path] = set()
 
     def is_root_directory(path: Path, *, detached: bool) -> bool:
-        """Detect if the path is pumpkin.py root directory."""
+        """Detect if the path is strawberry.py root directory."""
         if not detached:
-            if [f for f in path.glob("pumpkin.py") if f.is_file()]:
+            if [f for f in path.glob("strawberry.py") if f.is_file()]:
                 return True
         if path.is_dir() and detached:
             if [d for d in path.glob(".git") if d.is_dir()]:
@@ -151,9 +151,9 @@ def get_directories(paths: Iterable[Path], *, detached: bool) -> List[Path]:
 
     # The easiest way to find the directories is to hardcode some paths.
     # First, the root directory is found by inspecting the parents; if the n-th
-    # parent contains file 'pumpkin.py', it is the root.
+    # parent contains file 'strawberry.py', it is the root.
     # This check is done for every path, which not be effective. However, this
-    # way we can detect if there are multiple 'pumpkin.py' files, and if there
+    # way we can detect if there are multiple 'strawberry.py' files, and if there
     # are, we cause an abort.
 
     for path in paths:
@@ -184,7 +184,7 @@ def get_directories(paths: Iterable[Path], *, detached: bool) -> List[Path]:
                 f"Warning: Ignoring '{path!s}': directory criteria not matched"
             )
             if not detached:
-                warning += " (could not find 'pumpkin.py' script)."
+                warning += " (could not find 'strawberry.py' script)."
             else:
                 warning += " (could not find '.git' directory)."
             print(warning)
