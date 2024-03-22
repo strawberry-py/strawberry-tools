@@ -1,6 +1,6 @@
 # Pumpkin Tools
 
-A set of tools for the [pumpkin.py](https://github.com/pumpkin-py/) Discord bot framework.
+A set of tools for the [strawberry.py](https://github.com/strawberry-py/) Discord bot framework.
 
 ## Installation
 
@@ -9,7 +9,7 @@ We are not planning on publishing this package on PyPI. The tools will be mostly
 If you want to use the tools directly, use the following:
 
 ```bash
-python3 -m pip install git+https://github.com/pumpkin-py/pumpkin-tools.git
+python3 -m pip install git+https://github.com/strawberry-py/strawberry-tools.git
 ```
 
 ## Tools in this repository
@@ -42,15 +42,15 @@ You can enable debugging by setting `POPIE_DEBUG=1`.
 
 ## Development
 
-pumpkin.py is only intended to be run under Linux. Pumpkin tools try to be more open (you don't need Linux to make the translations), so included packages should work under other operating systems as well. However, they aren't officialy supported and we don't test new features on those systems. Feel free to open compatibility issue, but you may get only limited support, as non-Linux systems are not our priority.
+strawberry.py was only intended to be run under Linux. Pumpkin tools try to be more open (you don't need Linux to make the translations), so included packages should work under other operating systems as well. However, they aren't officialy supported and we don't test new features on those systems. Feel free to open compatibility issue, but you may get only limited support, as non-Linux systems are not our priority.
 
 The first thing you have to do is to fork the repository.
 
 ```bash
 # Download the repository
-git clone https://github.com/<your nickname>/pumpkin-tools.git
+git clone https://github.com/<your nickname>/strawberry-tools.git
 # Move into the repository
-cd pumpkin-tools
+cd strawberry-tools
 # Install and enable virtual environment
 python3 -m venv .venv
 source .venv/bin/activate

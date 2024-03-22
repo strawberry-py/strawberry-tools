@@ -1,6 +1,6 @@
 - id: popie
   name: popie
-  description: "A tool for string extraction in pumpkin.py repositories"
+  description: "A tool for string extraction in strawberry.py repositories"
   entry: popie
   language: python
   types_or: [python]
