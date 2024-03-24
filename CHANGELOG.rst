@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.10.0
+-----
+- Add support for ``itx`` and ``self.itx`` format
+
 1.9.0
 -----
 - Add ``--diff`` argument to display changes to the .popie files

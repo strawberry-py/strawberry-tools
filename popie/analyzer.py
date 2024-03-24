@@ -67,7 +67,7 @@ class Analyzer(ast.NodeVisitor):
         with as a function called '_' (an underscore).
 
         Those functions have to have two arguments:
-        - one named 'ctx', 'utx' or 'gtx',
+        - one named 'ctx', 'itx', 'utx', or 'gtx',
         - one string.
 
         These strings are saved to internal string pool and used to update
