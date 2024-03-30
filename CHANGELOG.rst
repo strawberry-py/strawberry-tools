@@ -1,8 +1,13 @@
 Changelog
 =========
 
+1.10.1
+------
+- Force LF as newline characted on all OS
+- Update pre-commit-config dependencies¨
+
 1.10.0
------
+------
 - Add support for ``itx`` and ``self.itx`` format
 
 1.9.0
