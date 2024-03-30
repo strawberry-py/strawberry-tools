@@ -99,7 +99,7 @@ class PoPieFile:
 
     def save(self):
         """Dump the content into the file."""
-        with open(self.filename, "w", encoding="utf-8") as pofile:
+        with open(self.filename, "w", encoding="utf-8", newline="\n") as pofile:
             string_count: int = len(self.translations)
             for i, (msgid, msgstr) in enumerate(self.translations.items()):
                 pofile.write(f"msgid {msgid}\n")
