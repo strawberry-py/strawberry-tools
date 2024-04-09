@@ -6,3 +6,4 @@ flake8-todo
 pre-commit
 pytest
 wheel
+isort
