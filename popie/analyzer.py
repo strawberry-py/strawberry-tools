@@ -1,9 +1,9 @@
 import ast
 from pathlib import Path
-from typing import List, Iterable
+from typing import Iterable, List
 
-from popie.object_types import String, Error
 from popie.constants import CONTEXTS
+from popie.object_types import Error, String
 
 
 class Analyzer(ast.NodeVisitor):
