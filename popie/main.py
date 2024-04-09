@@ -1,15 +1,15 @@
-import ast
 import argparse
-import sys
+import ast
 import os
+import sys
 from enum import IntEnum
-from typing import Callable, Iterable, List, Optional, Set
 from pathlib import Path
+from typing import Callable, Iterable, List, Optional, Set
 
 from popie.analyzer import Analyzer
-from popie.reporter import Reporter
 from popie.constants import LANGUAGES
 from popie.popiefile import PoPieFile
+from popie.reporter import Reporter
 
 OS_SEP = str(os.sep)
 

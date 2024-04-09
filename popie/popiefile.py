@@ -1,9 +1,9 @@
 import difflib
+import functools
 import os
 import re
-import functools
-from typing import Dict, Optional, List
 from pathlib import Path
+from typing import Dict, List, Optional
 
 from popie.reporter import Reporter
 

@@ -2,10 +2,9 @@ import tempfile
 from pathlib import Path
 from typing import Dict, Generator
 
-from popie.popiefile import PoPieFile
-
 import pytest
 
+from popie.popiefile import PoPieFile
 
 # Prepare
 
