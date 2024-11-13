@@ -2,6 +2,8 @@
 
 A set of tools for the [strawberry.py](https://github.com/strawberry-py/) Discord bot framework.
 
+This repository is a fork of [pumpkin-tools](https://github.com/pumpkin-py/pumpkin-tools).
+
 ## Installation
 
 We are not planning on publishing this package on PyPI. The tools will be mostly used as pre-commit hooks, which are installed directly from the version control system.
@@ -59,3 +61,11 @@ python3 -m pip install -e .
 # Test the installation by running its CLI tool
 popie -h
 ```
+
+## Authors
+
+The repository is mantained by [Fialin](https://github.com/j-fiala) and [ArcasCZ](https://github.com/ArcasCZ).
+
+The original tools were created mostly by [sinus-x](https://github.com/sinus-x) and [Czechbol](https://github.com/Czechbol).
+
+We also have several amazing contributors -- see them at the **Contributors** section on the right panel!
